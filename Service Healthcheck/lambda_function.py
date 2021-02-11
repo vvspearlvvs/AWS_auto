@@ -222,7 +222,8 @@ def Send_Slack(MSG):
     headers = {'Content-type': 'application/json'}
     body = {'text': MSG}
     json_body = json.dumps(body)
-    connection.request('POST', '/services/T0ADM364S/B011SDWATV5/GmRvZmqZPlCwIPpnuXuPFKED', json_body, headers)
+    #bot 토큰, 채팅방id넣기
+    #connection.request('POST', '/services/T0ADM364S/B011SDWATV5/GmRvZmqZPlCwIPpnuXuPFKED', json_body, headers)
     response = connection.getresponse()
     print(response.read().decode())
 
@@ -267,7 +268,7 @@ def lambda_handler(event, context):
             title = element.findtext('title')
             # 이벤트 개시시간(key2)
             pubDate = element.findtext('pubDate')
-    
+
             # 참고 링크
             guid = element.findtext('guid')
             # guid 값이 http://status.aws.amazon.com/#ec2-ap-northeast-1_1587391740 형식일 경우 정규식 패턴 매치
@@ -285,41 +286,38 @@ def lambda_handler(event, context):
                 product = "Service"
                 region = "Unknown"
             description = element.findtext('description')
-    
+
             # 리전 코드가 리전 리스트에 있을 경우 리전 이름으로 반환
             if region in region_dict:
                 region_name = region_dict[region]
             # 리전 코드가 리전 리스트에 없을 경우 리전코드 그대로 반환
             else:
                 region_name = region
-    
+
             # 프로덕트 코드가 리스트에 있을 경우 프로덕트 이름으로 반환
             if product in product_dict:
                 product_name = product_dict[product]
             # 프로덕트 코드가 리스트에 있을 경우 프로덕트코드 그대로 반환
             else:
                 product_name = product
-    
+
             # PDT에서 KST로 시간 반환
             kst_time = timeConvert(pubDate)
-    
-    
+
+
             # Description에 들어갈 번역본 반환
             translated_description = Translate(description)
             msg = "["+product_name+"]\n리전: "+region+" / "+region_name+"\n내용: "+title+"\n시간: "+kst_time+"\n상세: "+description+" "+translated_description
             #print(msg)
             # 슬랙 메시지 보내기
-            #Send_Slack(msg)
-    
+            Send_Slack(msg)
+
             #DB에 저장할 items
             db_items ={}
             db_items['title'] = title
             db_items['pubDate'] = pubDate
             db_items['guid'] = guid
             db_items['description'] = description
-    
+
             #DB에 저장
             put_DynamoDB(db_items,msg)
-
-
-
