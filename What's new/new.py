@@ -18,42 +18,24 @@ def insert_DB(document_list,collection):
         collection.insert_one(document)
     return "insert success"
 
-def select_DB(collection):
+def find_DB(collection):
     result = collection.find()
     for i in result:
         print(i)
 
 
 def main():
-    '''
+
     mongo_client = connect_DB(host,port)
     database = mongo_client.get_database('mydb')
-    collection =database.get_collection('aws')
-    collection.delete_many({})
-    '''
+    collection =database.get_collection('aws') #있으면 안넣고, 없는 데이터만 넣기
+    #collection.delete_many({})
+
     document_list = Crawling.get_crawling_aws()
     print(document_list)
-    '''
-    for content in document_list:
-        if 'service' in content['index']:
-            for service in content['index']['service']:
-                print(service)
-        elif 'marketing' in content['index']:
-            print("####### 마케팅만 있는거")
-        else:
-            print("null")
-    '''
-    #insert_DB(document_list,collection)
-    #select_DB(collection)
-    '''
-    document_list = Crawling.get_crawling_aws()
-    df = pd.DataFrame(document_list)
-    df['link'] = '<a href='+df['link']+'><div>'+df['en_title'] + '</div></a>'
-    Emailing.create_body(df)
-    '''
 
-    #document_table = Crawling.get_title_table()
-    #Emailing.create_table(document_table)
+    insert_DB(document_list,collection)
+    #find_DB(collection)
 
     Emailing.create_html(document_list)
 

@@ -1,0 +1,7 @@
+#CRONTAB FILE
+# Classic crontab format:
+# Minutes Hours Days Months WeekDays Command
+
+#매주 수요일 오전8:30 실행 자동화
+30 8 * * 3 C:\Users\gg664\AppData\Local\Programs\Python\Python38\python.exe C:\Users\gg664\IdeaProjects\AwsAutoProject\What's new\new.py
+

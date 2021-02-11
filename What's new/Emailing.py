@@ -6,7 +6,7 @@ from datetime import date,datetime, timedelta
 # basic information
 sender = "gg66477@gmail.com"
 receiver = "gg6647@naver.com"
-password = "kzruxledhcemeueu"
+password = "앱 패스워드"
 
 year = str(datetime.today().year)
 month = str(datetime.today().month)
@@ -50,7 +50,6 @@ def create_html(document_list):
 
 def create_body(dataframe):
     content= dataframe.to_html(escape=False)
-    #output=build_table(dataframe,'orange_dark')
     send_email(content)
     return "메일body : dataframe형식"
 
