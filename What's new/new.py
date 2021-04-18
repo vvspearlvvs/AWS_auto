@@ -1,66 +1,43 @@
-import feedparser
-import datetime
 from pymongo import MongoClient
+import pandas as pd
 
+import Emailing
+import Crawling
+
+# database
 host = "localhost"
 port = "27017"
 
-url = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 
 def connect_DB(host,port):
     mongo = MongoClient(host, int(port))
     print("DB Connect Success")
-
     return mongo
 
-def crawling_rss(url,collection):
+def insert_DB(document_list,collection):
+    for document in document_list:
+        collection.insert_one(document)
+    return "insert success"
 
-    document_list =[]
-    feed = feedparser.parse(url)
-
-    #print(len(feed['entries']))
-    #print(feed.entries[0])
-
-    for i in range(len(feed.entries)) :
-        aws_document = {}
-        published = str(feed.entries[i].published).replace("+0000","")
-        published_date = datetime.datetime.strptime(published,'%a, %d %b %Y %H:%M:%S ')
-
-        if feed.entries[i].tags:
-            tags_list = feed.entries[i].tags
-            term = tags_list[0]['term']
-        else:
-            term = "null"
-
-        aws_document['date'] = str(published_date)
-        aws_document['index'] = term
-        aws_document['title'] = feed.entries[i].title
-        aws_document['link'] = feed.entries[i].link
-
-        document_list.append(aws_document)
-
-    return document_list
+def select_DB(collection):
+    result = collection.find()
+    for i in result:
+        print(i)
 
 def main():
     mongo_client = connect_DB(host,port)
     database = mongo_client.get_database('mydb')
     collection =database.get_collection('aws')
-    '''
-    collection.drop()
-    print("before : select")
-    result = collection.find()
-    for i in result:
-        print(i)
-    '''
+    #collection.delete_many({})
 
-    document_list = crawling_rss(url,collection)
-    for document in document_list:
-        collection.insert_one(document)
+    document_list = Crawling.get_crawling_aws()
+    #print(document_list)
 
-    print("after : select")
-    result = collection.find()
-    for i in result:
-        print(i)
+    #insert_DB(document_list,collection)
+    #select_DB(collection)
+
+    data = pd.DataFrame(document_list)
+    Emailing.create_body(data)
 
 if __name__ == '__main__':
     main()
