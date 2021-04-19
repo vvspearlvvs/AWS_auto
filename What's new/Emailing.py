@@ -12,6 +12,18 @@ year = str(datetime.today().year)
 month = str(datetime.today().month)
 day = str(datetime.today().day)
 
+
+def get_week_no():
+    target=datetime.now() #datetime
+    firstday = target.replace(day=1)
+    if firstday.weekday() == 6:
+        origin = firstday
+    elif firstday.weekday() < 3:
+        origin = firstday - timedelta(days=firstday.weekday() + 1)
+    else:
+        origin = firstday + timedelta(days=6-firstday.weekday())
+    return (target - origin).days // 7 + 1
+
 def create_html(document_list):
     html =''
     html += '<!DOCTYPE html> ' \
@@ -45,8 +57,7 @@ def create_body(dataframe):
 def send_email(content):
     # 메일콘텐츠 설정
     message = MIMEMultipart('alternative')
-    message['Subject'] = "["+month+"월 "+"? 주차] AWS What's New 소식"
-    #message['Subject'] = "["+month+"월 "+str(get_week())+"주차] AWS What's News 소식"
+    message['Subject'] = "["+month+"월 "+str(get_week_no())+"주차] AWS What's New 소식"
     message['From'] = sender
     message['To'] = receiver
 
