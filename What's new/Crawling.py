@@ -20,8 +20,12 @@ def classify(term):
             elif "marketing" in category:
                 marketing_list.append(category.split("marketing:marchitecture/")[1])
                 index_documnet['marketing'] = marketing_list
+            else:
+                index_documnet['else']=category
     except:
         index_documnet = {}
+        #print("######make sub index ###")
+        #print(index_documnet)
     return index_documnet
 
 def crawling_aws(url,trans):

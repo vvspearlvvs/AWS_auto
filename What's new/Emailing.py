@@ -14,18 +14,27 @@ day = str(datetime.today().day)
 
 
 def create_html(document_list):
-    contents =''
-    contents += '<!DOCTYPE html> ' \
-                '<html>' \
-                '<body>' \
-                '<h2 style="font-family:Sans-Serif;text-align:center"><strong>AWS Weekly Whats New &#127752;</strong</h2>' \
-                '<hr style="border:0;border-top:solid 1px #e2e2e2;width:90%;margin:20px auto" class="horizontal-line">'
+    html =''
+    html += '<!DOCTYPE html> ' \
+            '<html>' \
+            '<body>' \
+            '<h2 style="font-family:Sans-Serif;text-align:center"><strong>AWS Weekly Whats New &#127752;</strong</h2>' \
+            '<hr style="border:0;border-top:solid 1px #e2e2e2;width:90%;margin:20px auto" class="horizontal-line">'
     for content in document_list:
-        contents+='<div style="margin-top:20px">' \
-                  '<h5 style="font-family:Sans-Serif;text-align:left;width:90%;margin:20px auto">'+content['ko_title'] +\
+        html+='<div style="margin-top:20px">' \
+              '<h5 style="font-family:Sans-Serif;text-align:left;width:90%;margin:20px auto">'
+        if 'service' in content['index']:
+            for service in content['index']['service']:
+                html+="#"+service
+        elif 'marketing' in content['index']:
+            html+="#marketing"
+        else:
+            html+="#else"
+
+        html+='<br>'+content['ko_title'] +\
                   '<a href="'+content['link']+'"style="color:#FF9900;text-decoration: none;"> 더보기</a></h5>'\
                   '</div></body></html>'
-    send_email(contents)
+    send_email(html)
     print("메일body : html형식")
 
 def create_body(dataframe):
