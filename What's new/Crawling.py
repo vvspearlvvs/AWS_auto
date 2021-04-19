@@ -29,9 +29,9 @@ def crawling_aws(url,trans):
         published = str(feed.entries[i].published).replace("+0000","")
         published_date = datetime.datetime.strptime(published,'%a, %d %b %Y %H:%M:%S ')
         now_date=datetime.datetime.now()
+        diffday = (now_date-published_date).days #메일전송일자 기준 일주일치만
 
-        #메일전송일자 기준 일주일치만
-        if (now_date-published_date).days <=7:
+        if diffday <=7:
             kor_title= trans.translate(feed.entries[i].title,src="en",dest="ko")
 
             if feed.entries[i].tags:
