@@ -38,8 +38,8 @@ def crawling_aws(url,trans):
 
     for i in range(len(feed.entries)):
         aws_document = {}
-        published = str(feed.entries[i].published).replace("+0000","")
-        published_date = datetime.datetime.strptime(published,'%a, %d %b %Y %H:%M:%S ')
+        published = str(feed.entries[i].published).replace("+0000","") #str
+        published_date = datetime.datetime.strptime(published,'%a, %d %b %Y %H:%M:%S ') #datetime
         now_date=datetime.datetime.now()
         diffday = (now_date-published_date).days #메일전송일자 기준 일주일치만
 
@@ -55,7 +55,7 @@ def crawling_aws(url,trans):
 
             sub_index = classify(term)
 
-            aws_document['date'] = str(published_date)
+            aws_document['date'] = published_date.strftime("%Y.%m.%d")
             aws_document['index'] = sub_index
             aws_document['ko_title'] = kor_title.text
             aws_document['en_title'] = feed.entries[i].title

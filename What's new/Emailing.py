@@ -12,7 +12,6 @@ year = str(datetime.today().year)
 month = str(datetime.today().month)
 day = str(datetime.today().day)
 
-
 def create_html(document_list):
     html =''
     html += '<!DOCTYPE html> ' \
@@ -22,7 +21,7 @@ def create_html(document_list):
             '<hr style="border:0;border-top:solid 1px #e2e2e2;width:90%;margin:20px auto" class="horizontal-line">'
     for content in document_list:
         html+='<div style="margin-top:20px">' \
-              '<h5 style="font-family:Sans-Serif;text-align:left;width:90%;margin:20px auto">'
+              '<h5 style="font-family:Sans-Serif;text-align:left;width:90%;margin:20px auto">'+"["+content['date']+"] "
         if 'service' in content['index']:
             for service in content['index']['service']:
                 html+="#"+service
