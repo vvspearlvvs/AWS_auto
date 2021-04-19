@@ -1,18 +1,24 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import date,datetime, timedelta
 
 # basic information
 sender = "gg66477@gmail.com"
 receiver = "gg6647@naver.com"
 password = "kzruxledhcemeueu"
 
+year = str(datetime.today().year)
+month = str(datetime.today().month)
+day = str(datetime.today().day)
+
+
 def create_html(document_list):
     contents =''
     contents += '<!DOCTYPE html> ' \
                 '<html>' \
-                '<body style="background-color:gray">' \
-                '<h2 style="font-family:Sans-Serif;text-align:center"><strong>4월 셋째주 AWS Whats New</strong</h2>' \
+                '<body>' \
+                '<h2 style="font-family:Sans-Serif;text-align:center"><strong>AWS Weekly Whats New &#127752;</strong</h2>' \
                 '<hr style="border:0;border-top:solid 1px #e2e2e2;width:90%;margin:20px auto" class="horizontal-line">'
     for content in document_list:
         contents+='<div style="margin-top:20px">' \
@@ -29,10 +35,10 @@ def create_body(dataframe):
     return "메일body : dataframe형식"
 
 def send_email(content):
-
     # 메일콘텐츠 설정
     message = MIMEMultipart('alternative')
-    message['Subject'] = "메일전송 테스트"
+    message['Subject'] = "["+month+"월 "+"? 주차] AWS What's New 소식"
+    #message['Subject'] = "["+month+"월 "+str(get_week())+"주차] AWS What's News 소식"
     message['From'] = sender
     message['To'] = receiver
 

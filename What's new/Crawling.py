@@ -8,13 +8,21 @@ url = "https://aws.amazon.com/about-aws/whats-new/recent/feed/"
 trans = Translator()
 
 def classify(term):
-    category_list = term.split(",")
-    for i in category_list:
-        if category_list in "general":
-            service_list = category_list.split("general:products")[1]
-        elif category_list in "marketing":
-            category = "marketing"
-    print(category_list)
+    index_documnet ={}
+    service_list =[]
+    marketing_list=[]
+    try:
+        category_list = term.split(",")
+        for category in category_list:
+            if "general" in category:
+                service_list.append(category.split("general:products/")[1])
+                index_documnet['service'] = service_list
+            elif "marketing" in category:
+                marketing_list.append(category.split("marketing:marchitecture/")[1])
+                index_documnet['marketing'] = marketing_list
+    except:
+        index_documnet = {}
+    return index_documnet
 
 def crawling_aws(url,trans):
 
@@ -37,12 +45,14 @@ def crawling_aws(url,trans):
             if feed.entries[i].tags:
                 tags_list = feed.entries[i].tags
                 term = tags_list[0]['term']
-                #classify(term)
+
             else:
                 term = "null"
 
+            sub_index = classify(term)
+
             aws_document['date'] = str(published_date)
-            #aws_document['index'] = term
+            aws_document['index'] = sub_index
             aws_document['ko_title'] = kor_title.text
             aws_document['en_title'] = feed.entries[i].title
             aws_document['link'] = feed.entries[i].link

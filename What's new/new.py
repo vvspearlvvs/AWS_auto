@@ -25,17 +25,15 @@ def select_DB(collection):
 
 
 def main():
-    contents =''
-
-    #mongo_client = connect_DB(host,port)
-    #database = mongo_client.get_database('mydb')
-    #collection =database.get_collection('aws')
-    #collection.delete_many({})
+    mongo_client = connect_DB(host,port)
+    database = mongo_client.get_database('mydb')
+    collection =database.get_collection('aws')
+    collection.delete_many({})
 
     document_list = Crawling.get_crawling_aws()
-    #print(document_list)
+    print(document_list)
 
-    #insert_DB(document_list,collection)
+    insert_DB(document_list,collection)
     #select_DB(collection)
     '''
     document_list = Crawling.get_crawling_aws()
@@ -47,7 +45,7 @@ def main():
     #document_table = Crawling.get_title_table()
     #Emailing.create_table(document_table)
 
-    Emailing.create_html(document_list)
+    #Emailing.create_html(document_list)
 
 if __name__ == '__main__':
     main()
